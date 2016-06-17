@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'yaml'
 require 'json'
+require 'time'
 
 config = YAML.load_file('config.yml')
 
@@ -16,7 +17,7 @@ get '/update/:channel/:version' do |channel, version|
       url: "#{config['environment']['base_path']}/#{channel}/#{release['version']}.zip",
       name: release['version'],
       notes: release['notes'],
-      pub_date: release['pub_date']
+      pub_date: Time.parse(release['pub_date']).iso8601
     }.to_json
   end
 end
