@@ -13,7 +13,7 @@ get '/update/:channel/:version' do |channel, version|
     release = config['updates'][channel]
     content_type :json
     {
-      url: "#{config['environment']['base_path']}/#{channel}/#{release['version']}.zip',
+      url: "#{config['environment']['base_path']}/#{channel}/#{release['version']}.zip",
       name: release['version'],
       notes: release['notes'],
       pub_date: release['pub_date']
