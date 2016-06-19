@@ -6,8 +6,13 @@ require 'time'
 config = YAML.load_file('config.yml')
 
 get '/update/:channel/:version' do |channel, version|
-  parameters_empty = channel.empty? || version.empty? || config['updates'][channel].empty?
-  if parameters_empty || Gem::Version.new(version) >= Gem::Version.new(config['updates'][channel]['version'])
+  parameters_empty = channel.empty? || version.empty? || !config['updates'][channel] || config['updates'][channel].empty?
+  begin
+    no_need_for_update = Gem::Version.new(version) >= Gem::Version.new(config['updates'][channel]['version'])
+  rescue
+    no_need_for_update = true
+  end
+  if parameters_empty || no_need_for_update
     status 204
     ''
   else
