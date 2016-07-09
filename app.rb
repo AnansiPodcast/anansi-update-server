@@ -20,6 +20,15 @@ end
 config = YAML.load_file('config.yml') unless ENV.has_key?('STABLE_VERSION')
 base_path = ENV.has_key?('BASE_PATH') ? ENV['BASE_PATH'] : config['environment']['base_path']
 
+get '/latest/:channel' do |channel|
+  channel_data = get_channel(channel, config)
+  parameters_empty = channel.empty? || !channel_data
+  content_type :json
+  {
+    latest: channel_data['version']
+  }
+end
+
 get '/update/:channel/:version' do |channel, version|
   channel_data = get_channel(channel, config)
   parameters_empty = channel.empty? || version.empty? || !channel_data
