@@ -22,11 +22,16 @@ base_path = ENV.has_key?('BASE_PATH') ? ENV['BASE_PATH'] : config['environment']
 
 get '/latest/:channel' do |channel|
   channel_data = get_channel(channel, config)
-  parameters_empty = channel.empty? || !channel_data
+  redirect to("#{base_path}/#{channel}/#{channel_data['version']}.zip")
+end
+
+get '/latest/:channel/info' do |channel|
+  channel_data = get_channel(channel, config)
   content_type :json
   {
-    latest: channel_data['version']
-  }
+    latest: channel_data['version'],
+    url: "#{base_path}/#{channel}/#{channel_data['version']}.zip"
+  }.to_json
 end
 
 get '/update/:channel/:version' do |channel, version|
