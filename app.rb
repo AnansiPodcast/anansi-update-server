@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'sinatra/cross_origin'
 require 'yaml'
 require 'json'
 require 'time'
@@ -26,6 +27,7 @@ get '/latest/:channel' do |channel|
 end
 
 get '/latest/:channel/info' do |channel|
+  cross_origin
   channel_data = get_channel(channel, config)
   content_type :json
   {
